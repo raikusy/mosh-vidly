@@ -1,10 +1,19 @@
 const express = require('express');
-const generes = require('./routes/generes');
+const mongoose = require('mongoose');
+
+const genres = require('./routes/genres');
+const customers = require('./routes/customers');
+
+mongoose
+  .connect('mongodb://localhost/vidly', { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected Succesfully'))
+  .catch(err => console.log('MongoDB Error: ', err));
 
 const app = express();
 
 app.use(express.json());
-app.use('/api/generes', generes);
+app.use('/api/genres', genres);
+app.use('/api/customers', customers);
 
 // Hello world
 app.get('/', (req, res) => {
