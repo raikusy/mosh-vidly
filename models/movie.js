@@ -39,7 +39,7 @@ function validateMovie(movie) {
       .required(),
     numberInStock: Joi.number(),
     dailyRentalRate: Joi.number(),
-    genreId: Joi.string().required()
+    genreId: Joi.objectId().required()
   };
   return Joi.validate(movie, schema);
 }

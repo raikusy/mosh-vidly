@@ -23,12 +23,12 @@ router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   try {
-    let customer = new Customer({
+    const customer = new Customer({
       name: req.body.name,
       phone: req.body.phone,
       isGold: req.body.isGold
     });
-    customer = await customer.save();
+    await customer.save();
     res.send(customer);
   } catch (err) {
     res.status(400).send(err.errmsg);
