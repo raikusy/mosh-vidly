@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
+require('express-async-errors');
 
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
