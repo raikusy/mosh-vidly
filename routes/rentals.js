@@ -7,6 +7,7 @@ const { Rental, validate } = require('../models/rental');
 const { Customer } = require('../models/customer');
 const { Movie } = require('../models/movie');
 const authMiddleware = require('../middleware/auth');
+const adminMiddleware = require('../middleware/admin');
 
 Fawn.init(mongoose);
 
@@ -16,16 +17,16 @@ router.get('/', async (req, res) => {
   res.send(rentals);
 });
 
-// Get one customer
+// Get one rental
 router.get('/:id', async (req, res) => {
-  const customer = await Rental.findById(req.params.id);
+  const rental = await Rental.findById(req.params.id);
 
-  if (!customer) return res.status(404).send('No customer found');
+  if (!rental) return res.status(404).send('No rental found');
 
-  res.send(customer);
+  res.send(rental);
 });
 
-// Create customer
+// Create rental
 router.post('/', authMiddleware, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -68,29 +69,30 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-// Edit customer
-router.put('/:id', authMiddleware, async (req, res) => {
+// TODO
+// Edit rental
+router.put('/:id', [authMiddleware, adminMiddleware], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const customer = await Rental.findByIdAndUpdate(
+  const rental = await Rental.findByIdAndUpdate(
     req.params.id,
     { name: req.body.name, phone: req.body.phone, isGold: req.body.isGold },
     { new: true }
   );
 
-  if (!customer) return res.status(404).send('No customer found');
+  if (!rental) return res.status(404).send('No rental found');
 
-  res.send(customer);
+  res.send(rental);
 });
 
-// Delete customer
-router.delete('/:id', authMiddleware, async (req, res) => {
-  const customer = await Rental.findByIdAndRemove(req.params.id);
+// Delete rental
+router.delete('/:id', [authMiddleware, adminMiddleware], async (req, res) => {
+  const rental = await Rental.findByIdAndRemove(req.params.id);
 
-  if (!customer) return res.status(404).send('No customer found');
+  if (!rental) return res.status(404).send('No rental found');
 
-  res.send(customer);
+  res.send(rental);
 });
 
 module.exports = router;
