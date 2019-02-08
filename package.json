@@ -7,6 +7,7 @@
     "bcrypt": "^3.0.4",
     "config": "^3.0.1",
     "express": "^4.16.4",
+    "express-async-errors": "^3.1.1",
     "fawn": "^2.1.5",
     "joi": "^14.3.1",
     "joi-objectid": "^2.0.0",

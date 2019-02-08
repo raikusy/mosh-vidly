@@ -11,6 +11,7 @@ const movies = require('./routes/movies');
 const rentals = require('./routes/rentals');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const errorMiddleware = require('./middleware/error');
 
 if (!config.get('jwtPrivateKey')) {
   console.error('FATAL ERROR: jwtPrivateKey is not defined');
@@ -31,6 +32,8 @@ app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+
+app.use(errorMiddleware);
 
 // Hello world
 app.get('/', (req, res) => {
