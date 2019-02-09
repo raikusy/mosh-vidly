@@ -7,6 +7,7 @@ const adminMiddleware = require('../middleware/admin');
 
 // Get all genres
 router.get('/', async (req, res) => {
+  // throw new Error('Something went wrong!');
   const genres = await Genre.find().sort('name');
   res.send(genres);
 });
