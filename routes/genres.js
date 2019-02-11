@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 const { Genre, validate } = require('../models/genre');
 const authMiddleware = require('../middleware/auth');
 const adminMiddleware = require('../middleware/admin');
+const validateObjectId = require('../middleware/validateObjectId');
 
 // Get all genres
 router.get('/', async (req, res) => {
@@ -13,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get one genre
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const genre = await Genre.findById(req.params.id);
 
   if (!genre) return res.status(404).send('No genre found');
