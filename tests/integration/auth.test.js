@@ -7,10 +7,10 @@ describe('auth Middleware', () => {
   beforeEach(() => {
     server = require('../../index');
     jest.setTimeout(999999);
-    server.maxConnections = 9999;
+    // server.maxConnections = 9999;
   });
   afterEach(async () => {
-    server.close();
+    await server.close();
     await Genre.deleteMany({});
   });
 
