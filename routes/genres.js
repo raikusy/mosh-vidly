@@ -36,7 +36,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Edit genre
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', [authMiddleware, validateObjectId], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -52,12 +52,16 @@ router.put('/:id', authMiddleware, async (req, res) => {
 });
 
 // Delete genre
-router.delete('/:id', [authMiddleware, adminMiddleware], async (req, res) => {
-  const genre = await Genre.findByIdAndRemove(req.params.id);
+router.delete(
+  '/:id',
+  [authMiddleware, adminMiddleware, validateObjectId],
+  async (req, res) => {
+    const genre = await Genre.findByIdAndRemove(req.params.id);
 
-  if (!genre) return res.status(404).send('No genre found');
+    if (!genre) return res.status(404).send('No genre found');
 
-  res.send(genre);
-});
+    res.send(genre);
+  }
+);
 
 module.exports = router;
