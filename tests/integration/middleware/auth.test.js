@@ -1,11 +1,11 @@
 const request = require('supertest');
-const { User } = require('../../models/user');
-const { Genre } = require('../../models/genre');
+const { User } = require('../../../models/user');
+const { Genre } = require('../../../models/genre');
 let server;
 describe('auth Middleware', () => {
   let token;
   beforeEach(() => {
-    server = require('../../index');
+    server = require('../../../index');
     jest.setTimeout(999999);
     // server.maxConnections = 9999;
   });

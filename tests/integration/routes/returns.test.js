@@ -1,6 +1,6 @@
-const { Rental } = require('../../models/rental');
-const { User } = require('../../models/user');
-const { Movie } = require('../../models/movie');
+const { Rental } = require('../../../models/rental');
+const { User } = require('../../../models/user');
+const { Movie } = require('../../../models/movie');
 const mongoose = require('mongoose');
 const request = require('supertest');
 const moment = require('moment');
@@ -22,7 +22,7 @@ describe('/api/returns', () => {
 
   beforeEach(async () => {
     jest.setTimeout(99999);
-    server = require('../../index');
+    server = require('../../../index');
     customerId = mongoose.Types.ObjectId();
     movieId = mongoose.Types.ObjectId();
     token = new User().generateAuthToken();
@@ -131,8 +131,6 @@ describe('/api/returns', () => {
 
   it('should return rental object if input is valid', async () => {
     const res = await exec();
-
-    const rentalInDb = await Rental.findById(rental._id);
 
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining([

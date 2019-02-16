@@ -5,24 +5,21 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
 const { User } = require('../models/user');
+const validate = require('../middleware/validate');
 
-router.post('/', async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', validate(validateAuth), async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send('Email or Password is invalid');
+  if (!user) return res.status(400).send('Email/Password is invalid');
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
 
-  if (!validPassword)
-    return res.status(400).send('Email or Password is invalid');
+  if (!validPassword) return res.status(400).send('Email/Password is invalid');
 
   const token = user.generateAuthToken();
   res.send(token);
 });
 
-function validate(user) {
+function validateAuth(user) {
   const schema = {
     email: Joi.string()
       .min(5)
