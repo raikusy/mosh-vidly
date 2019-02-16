@@ -1,41 +1,45 @@
 const express = require('express');
 const router = express.Router();
+const Joi = require('joi');
 const authMiddleware = require('../middleware/auth');
 const { Rental } = require('../models/rental');
 const { Movie } = require('../models/movie');
-const moment = require('moment');
+const validate = require('../middleware/validate');
 
-router.post('/', authMiddleware, async (req, res) => {
-  if (!req.body.customerId)
-    return res.status(400).send('No Customer Id Provided');
-  if (!req.body.movieId) return res.status(400).send('No Movie Id Provided');
-  const rental = await Rental.findOne({
-    'customer._id': req.body.customerId,
-    'movie._id': req.body.movieId
-  });
-  // console.log(rental);
-  if (!rental) return res.status(404).send('No Movie Found');
+router.post(
+  '/',
+  [authMiddleware, validate(validateReturns)],
+  async (req, res) => {
+    const rental = await Rental.lookup(req.body.customerId, req.body.movieId);
 
-  if (rental.dateReturned)
-    return res.status(400).send('Rental already processed');
+    if (!rental) return res.status(404).send('No Movie Found');
 
-  rental.dateReturned = new Date();
-  const rentalDays = moment().diff(rental.dateOut, 'days');
+    if (rental.dateReturned)
+      return res.status(400).send('Rental already processed');
 
-  rental.rentalFee = rentalDays * rental.movie.dailyRentalRate;
+    rental.return();
 
-  await rental.save();
+    await rental.save();
 
-  await Movie.updateOne(
-    { _id: req.body.movieId },
-    {
-      $inc: {
-        numberInStock: 1
+    await Movie.updateOne(
+      { _id: req.body.movieId },
+      {
+        $inc: {
+          numberInStock: 1
+        }
       }
-    }
-  );
+    );
 
-  res.status(200).send(rental);
-});
+    res.send(rental);
+  }
+);
+
+function validateReturns(req) {
+  const schema = {
+    customerId: Joi.objectId().required(),
+    movieId: Joi.objectId().required()
+  };
+  return Joi.validate(req, schema);
+}
 
 module.exports = router;
