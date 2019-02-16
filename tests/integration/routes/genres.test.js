@@ -183,6 +183,7 @@ describe('/api/genres', () => {
       expect(res.body).toHaveProperty('name', 'genre2');
     });
   });
+
   describe('DELETE /:id', () => {
     let token;
     let id;
