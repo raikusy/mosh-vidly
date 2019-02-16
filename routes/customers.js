@@ -5,6 +5,7 @@ const { Customer, validate } = require('../models/customer');
 const validateObjectId = require('../middleware/validateObjectId');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const validateCustomers = require('../middleware/validate');
 
 // Get all customers
 router.get('/', async (req, res) => {
@@ -22,10 +23,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
 });
 
 // Create customer
-router.post('/', async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', validateCustomers(validate), async (req, res) => {
   const customer = new Customer({
     name: req.body.name,
     phone: req.body.phone,
@@ -36,20 +34,24 @@ router.post('/', async (req, res) => {
 });
 
 // Edit customer
-router.put('/:id', validateObjectId, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+router.put(
+  '/:id',
+  [validateObjectId, validateCustomers(validate)],
+  async (req, res) => {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  const customer = await Customer.findByIdAndUpdate(
-    req.params.id,
-    { name: req.body.name, phone: req.body.phone, isGold: req.body.isGold },
-    { new: true }
-  );
+    const customer = await Customer.findByIdAndUpdate(
+      req.params.id,
+      { name: req.body.name, phone: req.body.phone, isGold: req.body.isGold },
+      { new: true }
+    );
 
-  if (!customer) return res.status(404).send('No customer found');
+    if (!customer) return res.status(404).send('No customer found');
 
-  res.send(customer);
-});
+    res.send(customer);
+  }
+);
 
 // Delete customer
 router.delete('/:id', [auth, admin, validateObjectId], async (req, res) => {
