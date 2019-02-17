@@ -195,15 +195,15 @@ describe('/api/rentals', () => {
 
     // TODO: Fix this test
 
-    // it('should save the rental if it is valid', async () => {
-    //   await exec();
+    it('should save the rental if it is valid', async () => {
+      await exec();
 
-    //   const rentalInDb = await Rental.lookup(customerId, movieId);
+      const rentalInDb = await Rental.lookup(customerId, movieId);
 
-    //   console.log(rentalInDb);
+      console.log(rentalInDb);
 
-    //   expect(rentalInDb).not.toBeNull();
-    // });
+      expect(rentalInDb).not.toBeNull();
+    });
 
     it('should return the saved rental if it is valid', async () => {
       const res = await exec();

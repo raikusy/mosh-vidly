@@ -55,7 +55,8 @@ router.post('/', authMiddleware, async (req, res) => {
   });
   // await rental.save();
   try {
-    new Fawn.Task()
+    const task = new Fawn.Task();
+    await task
       .save('rentals', rental)
       .update(
         'movies',
