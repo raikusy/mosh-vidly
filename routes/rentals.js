@@ -8,6 +8,7 @@ const { Customer } = require('../models/customer');
 const { Movie } = require('../models/movie');
 const authMiddleware = require('../middleware/auth');
 const adminMiddleware = require('../middleware/admin');
+const validateObjectId = require('../middleware/validateObjectId');
 
 Fawn.init(mongoose);
 
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get one rental
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const rental = await Rental.findById(req.params.id);
 
   if (!rental) return res.status(404).send('No rental found');
@@ -52,6 +53,7 @@ router.post('/', authMiddleware, async (req, res) => {
       dailyRentalRate: movie.dailyRentalRate
     }
   });
+  // await rental.save();
   try {
     new Fawn.Task()
       .save('rentals', rental)
@@ -69,7 +71,7 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-// TODO
+// TODO:
 // Edit rental
 router.put('/:id', [authMiddleware, adminMiddleware], async (req, res) => {
   const { error } = validate(req.body);
