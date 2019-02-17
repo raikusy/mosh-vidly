@@ -193,6 +193,8 @@ describe('/api/rentals', () => {
       expect(res.status).toBe(400);
     });
 
+    // TODO: Fix this test
+
     // it('should save the rental if it is valid', async () => {
     //   await exec();
 
@@ -211,6 +213,8 @@ describe('/api/rentals', () => {
       expect(res.body).toHaveProperty('_id');
     });
   });
+
+  // TODO: Complete rest of the tests
 
   // describe('PUT /:id', () => {
   //   let token;
