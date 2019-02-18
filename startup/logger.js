@@ -1,6 +1,7 @@
 const winston = require('winston');
 require('express-async-errors');
 require('winston-mongodb');
+const config = require('config');
 
 module.exports = function() {
   winston.handleExceptions(
