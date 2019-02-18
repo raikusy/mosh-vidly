@@ -13,6 +13,8 @@ describe('/api/rentals', () => {
   afterEach(async () => {
     await server.close();
     await Rental.deleteMany({});
+    await Customer.deleteMany({});
+    await Movie.deleteMany({});
   });
 
   describe('GET /', () => {
@@ -199,8 +201,6 @@ describe('/api/rentals', () => {
       await exec();
 
       const rentalInDb = await Rental.lookup(customerId, movieId);
-
-      console.log(rentalInDb);
 
       expect(rentalInDb).not.toBeNull();
     });
