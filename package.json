@@ -4,14 +4,20 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --watchAll --verbose --coverage"
+    "test": "jest --watchAll --verbose --coverage",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "v8.14.1"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
+    "compression": "^1.7.3",
     "config": "^3.0.1",
     "express": "^4.16.4",
     "express-async-errors": "^3.1.1",
     "fawn": "^2.1.5",
+    "helmet": "^3.15.1",
     "joi": "^14.3.1",
     "joi-objectid": "^2.0.0",
     "joi-password-complexity": "^2.0.1",
