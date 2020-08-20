@@ -11,7 +11,7 @@
     "node": "v8.14.1"
   },
   "dependencies": {
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^5.0.0",
     "compression": "^1.7.3",
     "config": "^3.0.1",
     "express": "^4.16.4",
